@@ -10,14 +10,51 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-
 model User {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  email String @unique
-  username String @unique
-  firstname String 
-  lastname String
-  photo: String
-  
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String   @unique
+  username  String   @unique
+  firstname String
+  lastname  String
+  photo     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  orders    Order[]  @relation(name: "Buyer")
+}
+
+model Event {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  title         String
+  description   String?
+  location      String?
+  imageUrl      String
+  isFree        Boolean  @default(false)
+  price         Int
+  url           String?
+  startDateTime DateTime
+  endDateTime   DateTime
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  order         Order?   @relation(name: "Event")
+  categoryId    String   @unique @db.ObjectId
+  category      Category @relation(name: "OrderCategory", fields: [categoryId], references: [id])
+}
+
+model Category {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  order     Event[]  @relation(name: "OrderCategory")
+}
+
+model Order {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  stripeId    String
+  totalAmount Int?
+  eventId     String   @unique @db.ObjectId
+  event       Event    @relation(name: "Event", fields: [eventId], references: [id])
+  buyerId     String   @unique @db.ObjectId
+  buyer       User?    @relation(name: "Buyer", fields: [buyerId], references: [id])
+  createdAt   DateTime @default(now())
 }
