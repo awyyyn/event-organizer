@@ -3,7 +3,8 @@ import { NextResponse } from "next/server";
 import { WebhookEvent } from "@clerk/nextjs/server";
 import { Webhook } from "svix";
 // import { User } from "@prisma/client";
-import { createUser } from "@/app/actions/user.action";
+import { createUser, deleteUser, updateUser } from "@/app/actions/user.actions";
+import { clerkClient } from "@clerk/nextjs";
 // import { clerkClient } from "@clerk/nextjs";
 // import {  } from "next/server"
 
@@ -62,13 +63,41 @@ export async function POST(req: Request) {
 			firstname: data.first_name,
 			lastname: data.last_name,
 			photo: data.image_url,
-
 			username: data.username!,
 		};
 
 		const newUser = await createUser(user);
+		if (newUser?.id as string) {
+			await clerkClient.users.updateUserMetadata(newUser?.id!, {
+				publicMetadata: { userId: newUser?.id },
+			});
+		}
 		console.log(newUser);
 		return NextResponse.json(newUser, { status: 201, statusText: "OK" });
+	}
+
+	if (event.type === "user.deleted") {
+		await deleteUser(event.data.id as string);
+		return NextResponse.json("User Deleted", { status: 200, statusText: "OK" });
+	}
+
+	if (event.type === "user.updated") {
+		const {
+			email_addresses,
+			first_name,
+			last_name,
+			image_url,
+			username,
+			public_metadata,
+		} = event.data;
+
+		await updateUser(public_metadata.userId as string, {
+			email: email_addresses[0].email_address,
+			firstname: first_name,
+			lastname: last_name,
+			username: username!,
+			photo: image_url,
+		});
 	}
 	return NextResponse.json("Error Occured", { status: 400, statusText: "ERR" });
 }
