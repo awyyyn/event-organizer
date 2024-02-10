@@ -1,9 +1,9 @@
-import "./globals.css";
-
-export default function RootLayout({
+export default function layout({
 	children,
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	return <>{children}</>;
+	return (
+		<main className="grid place-content-center min-h-dvh  ">{children}</main>
+	);
 }
