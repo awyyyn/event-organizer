@@ -28,7 +28,7 @@ const NavSheet = () => {
 
 const Header = () => {
 	return (
-		<header className="flex px-5 py-5 justify-between shadow-md fixed top-0 w-screen z-[99] bg-white">
+		<header className="flex padding-x py-5 justify-between shadow-md fixed top-0 w-screen z-[99] bg-white">
 			<h1>Event</h1>
 			<SignedIn>
 				<h1>Signed In</h1>

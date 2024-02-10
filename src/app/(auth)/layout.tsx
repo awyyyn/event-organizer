@@ -3,7 +3,5 @@ export default function layout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	return (
-		<main className="grid place-content-center min-h-dvh  ">{children}</main>
-	);
+	return <main className="grid place-content-center screen  ">{children}</main>;
 }

@@ -5,12 +5,12 @@ import { Button } from "../ui/button";
 
 const Hero = () => {
 	return (
-		<section className="flex flex-wrap min-h-dvh items-center justify-center p-5 xs:p-10 gap-y-10 md:gap-x-10 lg:gap-x-8 xl:gap-x-16 2xl:gap-x-48 ">
-			<div className="flex flex-col justify-between gap-y-5 sm:max-w-lg">
-				<h1 className="text-3xl font-extrabold">
+		<section className="flex flex-wrap md:flex-nowrap min-h-dvh py-20   items-center justify-center gap-y-10 md:justify-between padding-x  ">
+			<div className="flex flex-col justify-between gap-y-5  w-full  md:min-w-sm md:max-w-sm xl:max-w-lg">
+				<h1 className="text-3xl font-extrabold xl:text-5xl  ">
 					Host, Connect, Celebrate: Elevate Your Events with Our Platform
 				</h1>
-				<p>
+				<p className="xl:text-xl">
 					At [Your Event Platform], we understand that every event is a unique
 					celebration, a moment to connect, and an opportunity to make lasting
 					memories. Our platform is designed to empower you to host exceptional
@@ -20,7 +20,7 @@ const Hero = () => {
 				</p>
 				<Button className="max-w-fit">Explore</Button>
 			</div>
-			<div className="sm:p-10">
+			<div className=" ">
 				<Image src={event} height={500} width={600} alt="event" />
 			</div>
 		</section>

@@ -8,7 +8,7 @@ export default function layout({
 	return (
 		<div>
 			<Header />
-			<main className="mt-16">{children}</main>
+			<main className="screen">{children}</main>
 		</div>
 	);
 }
