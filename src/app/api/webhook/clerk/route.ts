@@ -2,9 +2,9 @@ import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { WebhookEvent } from "@clerk/nextjs/server";
 import { Webhook } from "svix";
-import { User } from "@prisma/client";
+// import { User } from "@prisma/client";
 import { createUser } from "@/app/actions/user.action";
-import { clerkClient } from "@clerk/nextjs";
+// import { clerkClient } from "@clerk/nextjs";
 // import {  } from "next/server"
 
 export async function POST(req: Request) {
