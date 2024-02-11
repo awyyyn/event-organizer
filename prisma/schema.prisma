@@ -33,11 +33,13 @@ model Event {
   url           String?
   startDateTime DateTime
   endDateTime   DateTime
+  orders         Order[]   @relation(name: "Event")
+  categoryId    String[]   @unique @db.ObjectId
+  category      Category[] @relation(name: "OrderCategory", fields: [categoryId], references: [id])
+  
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
-  order         Order?   @relation(name: "Event")
-  categoryId    String   @unique @db.ObjectId
-  category      Category @relation(name: "OrderCategory", fields: [categoryId], references: [id])
+  
 }
 
 model Category {
@@ -45,7 +47,8 @@ model Category {
   name      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  order     Event[]  @relation(name: "OrderCategory")
+  ordersIds   String[] @db.ObjectId
+  orders     Event[]  @relation(name: "OrderCategory", fields: [ordersIds], references: [id])
 }
 
 model Order {
