@@ -1,6 +1,7 @@
 "use server";
 
 import prisma from "@/lib/prisma";
+import { auth } from "@clerk/nextjs";
 import type { User } from "@prisma/client";
 
 export async function createUser(
@@ -65,4 +66,10 @@ export async function updateUser(
 			throw new Error(error.message);
 		}
 	}
+}
+
+export async function getAuth() {
+	const { userId } = auth();
+
+	return userId;
 }
