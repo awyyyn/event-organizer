@@ -13,41 +13,43 @@ import { CiCalendarDate } from "react-icons/ci";
 import { cn } from "@/lib/utils";
 
 interface DatePickerProps {
-	date: Date;
 	handleChange: any;
+	handleBlur: any;
 }
 
-function DatePicker({ handleChange, date }: DatePickerProps) {
-	const [isOpen, setIsOpen] = useState(false);
-	// useEffect(() => {
+function DatePicker({ handleChange, handleBlur }: DatePickerProps) {
+	const [date, setDate] = React.useState<Date>();
 
-	// }, [])
+	useEffect(() => {
+		handleChange("date", date?.toISOString()) as Date;
+	}, [date]);
 
 	return (
-		<Popover open={isOpen} modal={true}>
-			<PopoverTrigger asChild onClick={() => setIsOpen(true)}>
-				<Button
-					variant={"outline"}
-					className={cn(
-						"space-x-4  justify-start text-left font-normal w-full",
-						!date && "text-muted-foreground"
-					)}>
-					<CiCalendarDate className="mr-2 h-4 w-4" />
-					{date ? format(date, "PPP") : <span>Pick a date</span>}
-				</Button>
-			</PopoverTrigger>
-			<PopoverContent className="w-auto p-0" align="start">
-				<Calendar
-					mode="single"
-					selected={date}
-					onSelect={(e) => (
-						setIsOpen(false), handleChange("date", e?.toISOString())
-					)}
-					initialFocus
-					disabled={(date) => date < new Date()}
-				/>
-			</PopoverContent>
-		</Popover>
+		<>
+			<Popover>
+				<PopoverTrigger asChild>
+					<Button
+						onBlur={handleBlur}
+						variant={"outline"}
+						className={cn(
+							"space-x-4  justify-start text-left font-normal w-full",
+							!date && "text-muted-foreground"
+						)}>
+						<CiCalendarDate className="mr-2 h-4 w-4" />
+						{date ? format(date, "PPP") : <span>Pick a date</span>}
+					</Button>
+				</PopoverTrigger>
+				<PopoverContent className="w-auto p-0" align="start">
+					<Calendar
+						mode="single"
+						selected={date}
+						onSelect={setDate}
+						initialFocus
+						disabled={(date) => date < new Date()}
+					/>
+				</PopoverContent>
+			</Popover>
+		</>
 	);
 }
 

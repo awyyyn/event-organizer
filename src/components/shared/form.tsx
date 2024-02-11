@@ -4,126 +4,214 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useFormik } from "formik";
-import { array, boolean, date, number, object, string } from "yup";
+import { boolean, date, number, object, string } from "yup";
 
-import React from "react";
+import React, { useEffect } from "react";
 import DatePicker from "@/components/shared/date-picker";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
+import SingleFileUpload from "./single-file-upload";
+import { Event } from "@prisma/client";
+import { ComboBox } from "./combobox";
 
 const validateSchema = object().shape({
 	title: string().required("Title is required"),
 	description: string().notRequired(),
-	category: array().of(string()).required("Select at least 1 category"),
+	category: string().required("Category is required"),
 	isFree: boolean().required("Select if event is free").default(false),
 	price: number().when("isFree", {
 		is: false,
 		then: (schema) => schema.required("Price is required").min(1),
 		otherwise: (schema) => schema.notRequired(),
 	}),
-	date: date().required("Date is required").default(new Date()),
+	url: string().url("Invalid url").notRequired(),
+	location: string().notRequired(),
+	// startDateTime: date().required("Start date is required"),
+	// endDateTime: date().required("End date is required"),
+	imageUrl: string().required("Photo is required"),
+	date: date().required("Date is required"),
 });
 
 interface FormProps {
 	editEvent?: boolean;
-	data?: any;
+	data?: Partial<Omit<Event, "createdAt" | "updatedAt">>;
+	// action: (values: Partial<Omit<Event, "createdAt" | "updatedAt">>) => void;
 }
 
-export default function Form({ editEvent = false }: FormProps) {
-	const { values, handleChange, handleSubmit, setFieldValue, errors } =
-		useFormik({
-			initialValues: {
-				description: "",
-				category: ["as"],
-				title: "",
-				isFree: false,
-				price: 0,
-				date: new Date(),
-			},
+export default function Form({
+	editEvent = false,
+	data /* action */,
+}: FormProps) {
+	let initialValues;
 
-			onSubmit: (values) => {
-				console.log(values);
-			},
-			validationSchema: validateSchema,
-		});
+	if (editEvent && data) {
+		initialValues = {
+			description: data.description,
+			category: data.categoryId,
+			title: data.title,
+			isFree: data.isFree,
+			location: data.location,
+			url: data.url,
+			price: data.price,
+			imageUrl: data.imageUrl,
+			date: data.startDateTime,
+		};
+	} else {
+		initialValues = {
+			description: "",
+			category: "",
+			title: "",
+			isFree: false,
+			location: "",
+			url: "",
+			price: "",
+			imageUrl: "",
+			date: new Date(),
+		};
+	}
+
+	const {
+		values,
+		handleChange,
+		handleSubmit,
+		touched,
+		handleBlur,
+		setFieldValue,
+		errors,
+		submitCount,
+	} = useFormik({
+		initialValues,
+		onSubmit: (values) => {
+			//
+			console.log(values);
+		},
+		validationSchema: validateSchema,
+		validateOnMount: false,
+		// initialTouched: {
+		// 	date: true,
+		// },
+
+		// validate: validateSchema,
+	});
+
+	console.log(submitCount, errors);
 
 	return (
-		<section className="padding-x py-20">
-			<form onSubmit={handleSubmit}>
-				<h1 className="lg:text-4xl font-bold">Create Event</h1>
-				<div className="flex">
-					<div className="space-y-4">
-						<div>
-							<Label htmlFor="title">Title</Label>
-							<Input
-								type="title"
-								value={values.title}
-								onChange={handleChange}
-								id="title"
-								name="title"
-								placeholder="title"
-							/>
-						</div>
-						<div className="flex items-center space-x-2 justify-evenly">
-							<Label
-								htmlFor="isFree"
-								className={`${
-									!values.isFree ? "text-stone-950" : "text-stone-600"
-								}`}>
-								Paid Event?
-							</Label>
-							<Switch
-								id="isFree"
-								name="isFree"
-								checked={values.isFree}
-								onClick={(e) => console.log(e.currentTarget.value)}
-								// onChange={(e) => (
-								// 	setFieldValue("isFree", e.currentTarget.value),
-								// 	console.log(e.currentTarget.value, "va")
-								// )}
-								onCheckedChange={(e) => setFieldValue("isFree", e)}
-							/>
-
-							<Label
-								htmlFor="isFree"
-								className={`${
-									values.isFree ? "text-stone-950" : "text-stone-600"
-								}`}>
-								Free Event?
-							</Label>
-						</div>
-						<div>
-							<Label htmlFor="price">Price</Label>
-							<Input
-								type="price"
-								value={values.price}
-								onChange={handleChange}
-								id="price"
-								name="price"
-								placeholder="price"
-							/>
-						</div>
-						<div>
-							<Label htmlFor="description">Description</Label>
-							<Textarea
-								name="description"
-								id="description"
-								rows={5}
-								onChange={handleChange}
-								value={values.description}
-								placeholder="Reprehenderit elit commodo elit ut esse consectetur non non consequat anim deserunt anim aliquip sint."
-							/>
-						</div>
-						<div>
-							<Label className="block" htmlFor="date">
-								Date
-							</Label>
-							<DatePicker date={values.date} handleChange={setFieldValue} />
-						</div>
-						<Button type="submit">Create Event</Button>
-					</div>
+		<form onSubmit={handleSubmit}>
+			<h1 className="text-xl lg:text-4xl font-bold">Create Event</h1>
+			<div className="w-full space-y-5 pt-3">
+				<div className="space-y-2">
+					<Label>Category</Label>
+					<ComboBox />
+					{submitCount > 0 && errors.category && (
+						<span className="error-message">{errors.category}</span>
+					)}
 				</div>
-			</form>
-		</section>
+
+				<div className="space-y-1">
+					<Label htmlFor="title">Title</Label>
+					<Input
+						type="title"
+						value={values.title}
+						onBlur={handleBlur}
+						onChange={handleChange}
+						id="title"
+						name="title"
+						placeholder="Title"
+					/>
+					{touched.title && errors.title && (
+						<span className="error-message">{errors.title}</span>
+					)}
+				</div>
+
+				<div className="space-y-1">
+					<Label htmlFor="description">Description</Label>
+					<Textarea
+						name="description"
+						id="description"
+						rows={5}
+						onBlur={handleBlur}
+						onChange={handleChange}
+						value={values.description as string}
+						placeholder="Reprehenderit elit commodo elit ut esse consectetur non non consequat anim deserunt anim aliquip sint."
+					/>
+				</div>
+
+				<div className="flex items-center  justify-between sm:justify-normal sm:space-x-5">
+					<Label
+						htmlFor="isFree"
+						className={`${
+							!values.isFree ? "text-stone-950" : "text-stone-400"
+						} cursor-pointer`}>
+						Paid Event?
+					</Label>
+					<Switch
+						id="isFree"
+						name="isFree"
+						checked={values.isFree}
+						onClick={(e) => console.log(e.currentTarget.value)}
+						// onChange={(e) => (
+						// 	setFieldValue("isFree", e.currentTarget.value),
+						// 	console.log(e.currentTarget.value, "va")
+						// )}
+						onCheckedChange={(e) => setFieldValue("isFree", e)}
+					/>
+
+					<Label
+						htmlFor="isFree"
+						className={`${
+							values.isFree ? "text-stone-950" : "text-stone-400"
+						} cursor-pointer`}>
+						Free Event?
+					</Label>
+				</div>
+
+				<div className="space-y-1">
+					<Label
+						htmlFor="price"
+						className={`${values.isFree && "text-stone-400"} `}>
+						Price
+					</Label>
+					<Input
+						type="price"
+						value={values.price}
+						onChange={handleChange}
+						id="price"
+						onBlur={handleBlur}
+						name="price"
+						disabled={values.isFree}
+						placeholder="00.00"
+					/>
+
+					{touched.price && errors.price && (
+						<span className="error-message">{errors.price}</span>
+					)}
+				</div>
+
+				<div className="space-y-1">
+					<Label className="block" htmlFor="date">
+						Date
+					</Label>
+					<DatePicker
+						handleBlur={handleBlur("date")}
+						handleChange={setFieldValue}
+					/>
+					{submitCount > 0 && errors.date && (
+						<span className="error-message"> {errors.date as any} </span>
+					)}
+				</div>
+
+				<div>
+					<SingleFileUpload
+						photo={values.imageUrl as string}
+						setPhoto={(url: string) => setFieldValue("imageUrl", url)}
+					/>
+					{submitCount > 0 && errors.imageUrl && (
+						<span className="error-message"> {errors.imageUrl} </span>
+					)}
+				</div>
+
+				<Button type="submit">Create Event</Button>
+			</div>
+		</form>
 	);
 }

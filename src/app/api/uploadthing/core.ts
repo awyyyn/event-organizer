@@ -4,7 +4,7 @@ import { UploadThingError } from "uploadthing/server";
 const f = createUploadthing();
 
 export const ourFileRouter = {
-	imageUploader: f({ image: { maxFileSize: "4MB" } })
+	imageUploader: f({ image: { maxFileSize: "4MB", maxFileCount: 1 } })
 		.onUploadError(({ error }) => {
 			throw new Error(error.message);
 		})

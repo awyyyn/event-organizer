@@ -20,7 +20,7 @@ const Hero = () => {
 				</p>
 				<Button className="max-w-fit">Explore</Button>
 			</div>
-			<div className=" ">
+			<div className="">
 				<Image src={event} height={500} width={600} alt="event" />
 			</div>
 		</section>
