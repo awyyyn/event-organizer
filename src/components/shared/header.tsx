@@ -35,10 +35,7 @@ const NavSheet = () => {
 
 const Nav = ({ className }: { className?: string }) => {
 	return nav_links.map(({ label, path }, indx) => (
-		<Link
-			key={indx}
-			href={path}
-			className={`${className} `}>
+		<Link key={indx} href={path} className={`${className} `}>
 			{label}
 		</Link>
 	));
@@ -46,22 +43,24 @@ const Nav = ({ className }: { className?: string }) => {
 
 const Header = () => {
 	return (
-		<header className="flex padding-x py-5 items-center justify-between shadow-md fixed top-0 w-screen z-20 bg-white">
-			<div className="flex items-center gap-x-4">
-				<div className="md:hidden">
-					<NavSheet />
+		<header>
+			<div className="flex padding-x py-5 items-center justify-between shadow-md fixed top-0 w-screen z-20 bg-white">
+				<div className="flex items-center gap-x-4">
+					<div className="md:hidden">
+						<NavSheet />
+					</div>
+					<h1>Event</h1>
 				</div>
-				<h1>Event</h1>
+				<SignedIn>
+					<div className="hidden md:flex items-center gap-x-4">
+						<Nav />
+					</div>
+					<UserButton />
+				</SignedIn>
+				<SignedOut>
+					<SignInButton />
+				</SignedOut>
 			</div>
-			<SignedIn>
-				<div className="hidden md:flex items-center gap-x-4">
-					<Nav />
-				</div>
-				<UserButton />
-			</SignedIn>
-			<SignedOut>
-				<SignInButton />
-			</SignedOut>
 		</header>
 	);
 };

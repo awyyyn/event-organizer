@@ -5,11 +5,11 @@ export const nav_links = [
 	},
 	{
 		label: "Events",
-		path: "/events",
+		path: "/event",
 	},
 	{
 		label: "Create Event",
-		path: "/events/create",
+		path: "/event/create",
 	},
 	{
 		label: "Profile",

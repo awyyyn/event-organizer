@@ -11,8 +11,6 @@ interface fileUploadProps {
 }
 
 const SingleFileUpload = ({ setPhoto, photo }: fileUploadProps) => {
-	const handleCompleteUpload = () => {};
-
 	return (
 		<>
 			{photo ? (
@@ -47,10 +45,8 @@ const SingleFileUpload = ({ setPhoto, photo }: fileUploadProps) => {
 						appearance={{
 							container: "h-60",
 							label: "text-stone-600",
-							button(args) {
-								return {
-									display: "none",
-								};
+							button({ isUploading, uploadProgress }) {
+								return `${uploadProgress && "bg-secondary"} `;
 							},
 						}}
 						content={{
