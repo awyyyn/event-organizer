@@ -1,16 +1,24 @@
-import React from "react";
+import React, { Suspense } from "react";
 import {
 	Sheet,
+	SheetClose,
 	SheetContent,
 	SheetDescription,
 	SheetHeader,
 	SheetTitle,
 	SheetTrigger,
 } from "@/components/ui/sheet";
-import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import {
+	SignInButton,
+	SignedIn,
+	SignedOut,
+	UserButton,
+	ClerkLoading,
+} from "@clerk/nextjs";
 import { nav_links } from "@/lib/constant";
 import Link from "next/link";
 import { HiOutlineMenuAlt4 } from "react-icons/hi";
+import { Skeleton } from "../ui/skeleton";
 // import { Button } from "../ui/button";
 
 const NavSheet = () => {
@@ -24,9 +32,15 @@ const NavSheet = () => {
 			<SheetContent className="z-[100]" side="left">
 				<SheetHeader className="flex flex-col items-start py-4">
 					<SheetTitle>Event</SheetTitle>
-					<div className="space-y-4">
-						<Nav className="block w-full text-left" />
-					</div>
+					{/* <div className="space-y-4"> */}
+					{/* <Nav className="block w-full text-left" /> */}
+					{nav_links.map(({ label, path }, indx) => (
+						<SheetClose asChild key={indx} className="space-y-4">
+							<Link key={indx} href={path}>
+								{label}
+							</Link>
+						</SheetClose>
+					))}
 				</SheetHeader>
 			</SheetContent>
 		</Sheet>
@@ -55,9 +69,15 @@ const Header = () => {
 					<div className="hidden md:flex items-center gap-x-4">
 						<Nav />
 					</div>
+					<ClerkLoading>
+						<Skeleton className="h-8 w-8 rounded-full" />
+					</ClerkLoading>
 					<UserButton />
 				</SignedIn>
 				<SignedOut>
+					<ClerkLoading>
+						<Skeleton className="h-8 w-20  " />
+					</ClerkLoading>
 					<SignInButton />
 				</SignedOut>
 			</div>

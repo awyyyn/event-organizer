@@ -1,17 +1,12 @@
 "use client";
 import * as React from "react";
 import Autoplay from "embla-carousel-autoplay";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-	Carousel,
-	CarouselContent,
-	CarouselItem,
-	CarouselNext,
-	CarouselPrevious,
-} from "@/components/ui/carousel";
+import { Carousel, CarouselContent } from "@/components/ui/carousel";
 import { type CarouselApi } from "@/components/ui/carousel";
+import { Event } from "@prisma/client";
+import EventCarouselItem from "./event-carousel-item";
 
-export function EventCarousel() {
+export default function EventCarousel({ events }: { events: Event[] }) {
 	const [api, setApi] = React.useState<CarouselApi>();
 	const [current, setCurrent] = React.useState(0);
 	const [count, setCount] = React.useState(0);
@@ -29,19 +24,18 @@ export function EventCarousel() {
 	}, [api]);
 
 	return (
-		<div className="w-full border-2 border-red-500 mr-10">
+		<div className="   mr-10   ">
 			<Carousel
 				setApi={setApi}
-				className="w-full "
 				plugins={[
 					Autoplay({
 						delay: 10000,
 					}),
 				]}>
-				<CarouselContent>
-					<CarouselItem>..1.</CarouselItem>
-					<CarouselItem>..2.</CarouselItem>
-					<CarouselItem>..3.</CarouselItem>
+				<CarouselContent className=" ">
+					{events.map((event) => (
+						<EventCarouselItem key={event.id} {...event} />
+					))}
 				</CarouselContent>
 				{/* <CarouselPrevious />
 				<CarouselNext /> */}

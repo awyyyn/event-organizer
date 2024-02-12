@@ -81,7 +81,7 @@
 
 @layer components {
 	.padding-x {
-		@apply px-5 sm:px-16 md:px-24 lg:px-36 xl:px-44;
+		@apply px-5 sm:px-16 md:px-20 lg:px-28 xl:px-40;
 	}
 	.error-message {
 		@apply text-xs text-red-600;

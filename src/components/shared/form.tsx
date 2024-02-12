@@ -96,7 +96,6 @@ export default function Form({
 		handleBlur,
 		setFieldValue,
 		errors,
-		resetForm,
 		submitCount,
 		isSubmitting,
 	} = useFormik({
@@ -131,8 +130,6 @@ export default function Form({
 					description: "There was a problem with your request.",
 				});
 			}
-
-			console.log(event, "s");
 		},
 		validationSchema: validateSchema,
 		validateOnMount: false,
