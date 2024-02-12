@@ -23,23 +23,26 @@ model User {
 }
 
 model Event {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  title         String
-  description   String?
-  location      String?
-  imageUrl      String
-  isFree        Boolean  @default(false)
-  price         Int
-  url           String?
-  startDateTime DateTime
-  endDateTime   DateTime
-  orders         Order[]   @relation(name: "Event")
-  categoryId    String[]   @unique @db.ObjectId
-  category      Category[] @relation(name: "OrderCategory", fields: [categoryId], references: [id])
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String?
+  location    String?
+  imageUrl    String
+  isFree      Boolean    @default(false)
+  price       Int?
+  url         String?
+  startDate   DateTime
+  endDate     DateTime
+  orders      Order[]    @relation(name: "Event")
   
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  
+  categoryId  String   @unique @db.ObjectId
+  category    Category @relation(name: "OrderCategory", fields: [categoryId], references: [id])
+
+  startTime String
+  endTime   String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Category {
@@ -47,8 +50,9 @@ model Category {
   name      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  ordersIds   String[] @db.ObjectId
-  orders     Event[]  @relation(name: "OrderCategory", fields: [ordersIds], references: [id])
+  ordersIds String[] @db.ObjectId
+
+  orders    Event[]  @relation(name: "OrderCategory" )
 }
 
 model Order {
