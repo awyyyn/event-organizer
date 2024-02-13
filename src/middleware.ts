@@ -7,12 +7,14 @@ export default authMiddleware({
 		"/api/uploadthing",
 		"/api/events",
 		"/api/event",
+		"/api/event/:eventId",
 	],
 	ignoredRoutes: [
 		"/api/webhook/clerk",
 		"/api/uploadthing",
 		"/api/events",
 		"/api/event",
+		"/api/event/:eventId",
 	],
 	// apiRoutes: ["/api/events", "/api/event"],
 

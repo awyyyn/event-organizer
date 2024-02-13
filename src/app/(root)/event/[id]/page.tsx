@@ -7,7 +7,7 @@ const origin =
 		: process.env.PROD_DOMAIN;
 
 async function getEvent(eventId: string) {
-	const result = await fetch(`${origin}/api/event?eventId=${eventId}`, {
+	const result = await fetch(`${origin}/api/event/${eventId}`, {
 		method: "GET",
 	});
 
