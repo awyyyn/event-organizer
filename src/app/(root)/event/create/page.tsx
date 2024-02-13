@@ -1,9 +1,7 @@
 import { createEvent } from "@/app/actions/event.actions";
 import FormSpinner from "@/components/shared/form-spinner";
-import { auth, currentUser } from "@clerk/nextjs";
 import { Event } from "@prisma/client";
 import React, { Suspense, lazy } from "react";
-import { metadata } from "../../../layout";
 const Form = lazy(() => import("@/components/shared/form"));
 const EventCarousel = lazy(() => import("@/components/shared/event-carousel"));
 
@@ -13,7 +11,7 @@ async function getEvents() {
 			? process.env.DEV_DOMAIN
 			: process.env.PROD_DOMAIN;
 	const res = await fetch(`${origin}/api/events`);
-	const events: Event[] = await res.json();
+	const events = await res.json();
 	return events;
 }
 
@@ -36,7 +34,7 @@ export default async function CreateEvent() {
 			</div>
 			<div className="max-w-[45%]  bg-red-400 flex-nowrap xl:bg-yellow-500 hidden lg:block lg:mr-10   ">
 				<Suspense fallback={<h1>Loading...</h1>}>
-					<EventCarousel events={events} />
+					<EventCarousel events={events as Event[]} />
 				</Suspense>
 			</div>
 		</div>
