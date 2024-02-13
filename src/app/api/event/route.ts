@@ -28,8 +28,7 @@ export async function GET(req: NextRequest) {
 		return NextResponse.json(event, { status: 200, statusText: "OK" });
 	} catch (error) {
 		if (error instanceof Error) {
-			// throw new Error(error.message);
-			console.log(error);
+			throw new Error(error.message);
 		}
 	}
 }
