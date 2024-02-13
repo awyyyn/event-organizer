@@ -7,20 +7,15 @@ async function getEvents() {
 			? process.env.DEV_DOMAIN
 			: process.env.PROD_DOMAIN;
 
-	try {
-		const res = await fetch(`${origin}/api/events`, { method: "GET" });
-		const events: EventType[] = await res.json();
+	const res = await fetch(`${origin}/api/events`, { method: "GET" });
+	const events: EventType[] = await res.json();
 
-		console.log(events, "eveasdnts");
-		return events;
-	} catch (error) {
-		if (error instanceof Error) console.log(error.message);
-		else console.log(error);
-	}
+	return events;
 }
 
 export default async function Event() {
 	const events = await getEvents();
+	console.log(events, "/event");
 
 	return (
 		<div className="padding-x">

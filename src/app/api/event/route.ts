@@ -1,21 +1,35 @@
-import { clerkClient } from "@clerk/nextjs";
-import { headers } from "next/headers";
-import { NextResponse } from "next/server";
+import prisma from "@/lib/prisma";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(request: Request) {
-	const req = await request.json();
-	const headersStore = headers();
-	const token = headersStore.get("Authorization")?.split(" ")[1] as string;
-	const sid = headersStore.get("Cookie")?.split("=")[1] as string;
-
-	const isvalid = await clerkClient.sessions.verifySession(sid, token);
-	console.log(isvalid, "a");
-
+export async function GET(req: NextRequest) {
 	try {
-		return NextResponse.json({ message: "HELLO WORLD" });
+		const url = req.nextUrl;
+		const eventId = url.searchParams.get("eventId");
+
+		if (eventId === null) {
+			// return NextResponse.json({ message: "Event ID is missing!" });
+			throw new Error("Event ID is missing!");
+		}
+
+		const event = await prisma.event.findUnique({
+			where: { id: eventId },
+			include: {
+				orders: true,
+				_count: true,
+				category: true,
+				eventBy: true,
+			},
+		});
+
+		if (event === null) {
+			// return NextResponse.json({ message: "Event not found!" });
+			throw new Error("Event not found!");
+		}
+		return NextResponse.json(event, { status: 200, statusText: "OK" });
 	} catch (error) {
 		if (error instanceof Error) {
-			throw new Error(error.message);
+			// throw new Error(error.message);
+			console.log(error);
 		}
 	}
 }

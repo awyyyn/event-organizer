@@ -13,6 +13,7 @@ const origin =
 async function getEvents() {
 	const res = await fetch(`${origin}/api/events`, { method: "GET" });
 	const events = await res.json();
+
 	return events;
 }
 

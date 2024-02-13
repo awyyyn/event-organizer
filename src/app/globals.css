@@ -4,6 +4,7 @@
 
 .screen {
 	height: calc(100dvh, -64px);
+	padding-top: 80px;
 }
 
 @layer base {
