@@ -256,27 +256,29 @@ export default function Form({
 					)}
 				</div>
 
-				<div className="space-y-1">
-					<Label htmlFor="start-time">Start time</Label>
-					<SelectTime
-						handleChange={(v) => setFieldValue("startTime", v)}
-						handleBlur={() => handleBlur("startTime")}
-					/>
-					{submitCount > 0 && errors.startTime && (
-						<span className="error-message"> {errors.startTime} </span>
-					)}
-				</div>
+				<div className="flex lg:flex-row flex-col gap-y-5 lg:gap-x-2   w-full">
+					<div className="space-y-1 w-full lg:w-1/2">
+						<Label htmlFor="start-time">Start time</Label>
+						<SelectTime
+							handleChange={(v) => setFieldValue("startTime", v)}
+							handleBlur={() => handleBlur("startTime")}
+						/>
+						{submitCount > 0 && errors.startTime && (
+							<span className="error-message"> {errors.startTime} </span>
+						)}
+					</div>
 
-				<div className="space-y-1">
-					<Label htmlFor="end-time">End time</Label>
-					<SelectTime
-						label="end"
-						handleChange={(v) => setFieldValue("endTime", v)}
-						handleBlur={() => handleBlur("endTime")}
-					/>
-					{submitCount > 0 && errors.endTime && (
-						<span className="error-message"> {errors.endTime} </span>
-					)}
+					<div className="space-y-1 w-full lg:w-1/2">
+						<Label htmlFor="end-time">End time</Label>
+						<SelectTime
+							label="end"
+							handleChange={(v) => setFieldValue("endTime", v)}
+							handleBlur={() => handleBlur("endTime")}
+						/>
+						{submitCount > 0 && errors.endTime && (
+							<span className="error-message"> {errors.endTime} </span>
+						)}
+					</div>
 				</div>
 
 				<div className="space-y-1">

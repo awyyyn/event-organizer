@@ -1,11 +1,15 @@
 "use server";
 
 import prisma from "@/lib/prisma";
+import { currentUser } from "@clerk/nextjs";
 import { Event } from "@prisma/client";
 
 export const createEvent = async (
 	values: Partial<Omit<Event, "createdAt" | "updatedAt">>
 ) => {
+	const user = await currentUser();
+	const userId = user?.publicMetadata?.userId as string;
+
 	try {
 		const event = await prisma.event.create({
 			data: {
@@ -25,6 +29,11 @@ export const createEvent = async (
 				category: {
 					connect: {
 						id: values.categoryId,
+					},
+				},
+				eventBy: {
+					connect: {
+						id: userId,
 					},
 				},
 			},

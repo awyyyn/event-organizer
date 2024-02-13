@@ -87,3 +87,8 @@
 		@apply text-xs text-red-600;
 	}
 }
+
+.badge {
+	margin-inline: 5px;
+	font-size: small;
+}

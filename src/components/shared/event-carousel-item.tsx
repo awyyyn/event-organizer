@@ -27,22 +27,22 @@ export default function EventCarouselItem({
 				height={300}
 				width={500}
 				className="object-cover   "
-				placeholder="blur"
-				blurDataURL="/blurdata.png"
+				placeholder="empty"
+				// blurDataURL="/blurdata.png"
 				loading="lazy"
 			/>
 			{/* </div> */}
 
-			<div className="flex gap-x-2 items-center flex-wrap">
-				<Badge variant={"outline"} className="space-x-1">
+			<div className="flex gap-x-2 items-center  ">
+				<Badge variant={"outline"} className="badge">
 					{isFree ? "Free Event" : "Paid Event"}
 				</Badge>
-				<Badge variant={"outline"} className="space-x-1">
+				<Badge variant={"outline"} className="badge">
 					<CiLocationOn />
 					<span>{location ? location : "unknown"}</span>
 				</Badge>
 				{price && (
-					<Badge variant={"outline"} className="space-x-1">
+					<Badge variant={"outline"} className="badge">
 						<RiMoneyDollarCircleFill />
 						{price}
 					</Badge>

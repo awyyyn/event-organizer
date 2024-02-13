@@ -24,7 +24,7 @@ export default function EventCarousel({ events }: { events: Event[] }) {
 	}, [api]);
 
 	return (
-		<div className="   mr-10   ">
+		<div className=" ">
 			<Carousel
 				setApi={setApi}
 				plugins={[

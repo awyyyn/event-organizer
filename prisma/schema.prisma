@@ -19,7 +19,10 @@ model User {
   photo     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
   orders    Order[]  @relation(name: "Buyer")
+
+  events  Event[] @relation(name: "EventBy")
 }
 
 model Event {
@@ -40,6 +43,10 @@ model Event {
 
   startTime String
   endTime   String
+
+  eventById String @db.ObjectId
+  eventBy User @relation(name: "EventBy",  references: [id], fields: [eventById])
+
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
