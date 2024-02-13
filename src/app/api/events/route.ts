@@ -9,6 +9,7 @@ export async function GET() {
 			},
 			take: 5,
 		});
+		console.log("values.isFreeGE", events);
 		return NextResponse.json(events, { status: 200, statusText: "OK" });
 	} catch (error) {
 		if (error instanceof Error) {

@@ -13,10 +13,10 @@ import SingleFileUpload from "./single-file-upload";
 import { Event } from "@prisma/client";
 import { ComboBox } from "./combobox";
 import { SelectTime } from "./select-time";
-import { ToastAction } from "../ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import { AiOutlineLoading } from "react-icons/ai";
 import { useRouter } from "next/navigation";
+import { createEvent } from "@/app/actions/event.actions";
 
 const validateSchema = object().shape({
 	title: string().required("Title is required"),
@@ -40,9 +40,9 @@ const validateSchema = object().shape({
 interface FormProps {
 	editEvent?: boolean;
 	label: string;
-	data?: Partial<Omit<Event, "createdAt" | "updatedAt">>;
-	action: (
-		values: Partial<Omit<Event, "createdAt" | "updatedAt">>
+	data?: Partial<Omit<Event, "createdAt" | "updatedAt" | "eventById">>;
+	action?: (
+		values: Partial<Omit<Event, "createdAt" | "updatedAt" | "eventById">>
 	) => Promise<Event>;
 }
 
@@ -98,26 +98,32 @@ export default function Form({
 		errors,
 		submitCount,
 		isSubmitting,
+		submitForm,
 	} = useFormik({
 		initialValues,
 		onSubmit: async (values) => {
-			const event = await action({
-				categoryId: values.category,
-				description: values.description,
-				title: values.title,
-				isFree: values.isFree,
-				location: values.location,
-				startTime: values.startTime,
-				endTime: values.endTime,
-				url: values.url,
-				price: values.isFree ? 0 : Number(values.price),
-				imageUrl: values.imageUrl,
-				startDate: values.startDate,
-				endDate: values.endDate ?? new Date(),
-				id: data?.id,
-			});
-			if (event.id) {
-				router.push(`/event/${event.id}`);
+			let event;
+
+			if (editEvent) {
+			} else {
+				event = await createEvent({
+					categoryId: values.category!,
+					description: values?.description!,
+					endDate: values.endDate ? values.endDate : new Date(),
+					endTime: values.endTime!,
+					imageUrl: values.imageUrl!,
+					isFree: values.isFree as boolean,
+					location: values.location!,
+					price: Number(values.price),
+					startDate: values.startDate as Date,
+					startTime: values.startTime!,
+					title: values.title!,
+					url: values.url!,
+				});
+			}
+
+			if (event && event.id) {
+				router.push(`/event/${event?.id}`);
 				toast({
 					variant: "default",
 					className: "bg-green-600 z-5  text-white",

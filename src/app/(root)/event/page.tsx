@@ -8,8 +8,10 @@ async function getEvents() {
 			: process.env.PROD_DOMAIN;
 
 	try {
-		const res = await fetch(`${origin}/api/events`);
+		const res = await fetch(`${origin}/api/events`, { method: "GET" });
 		const events: EventType[] = await res.json();
+
+		console.log(events, "eveasdnts");
 		return events;
 	} catch (error) {
 		if (error instanceof Error) console.log(error.message);
@@ -19,8 +21,6 @@ async function getEvents() {
 
 export default async function Event() {
 	const events = await getEvents();
-
-	console.log(events, "events");
 
 	return (
 		<div className="padding-x">
