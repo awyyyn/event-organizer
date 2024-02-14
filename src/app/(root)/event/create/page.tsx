@@ -19,9 +19,9 @@ async function getEvents() {
 
 export default async function CreateEvent() {
 	const events = await getEvents();
-	console.log(events, "events", origin);
+
 	return (
-		<div className="padding-x py-28 flex-wrap   lg:flex lg:flex-row-reverse lg:justify-between w-full">
+		<div className="padding-x   flex-wrap   lg:flex lg:flex-row-reverse lg:justify-between w-full">
 			<div className="lg:min-w-[350px] xl:w-[50%]">
 				<Suspense fallback={<FormSpinner />}>
 					<Form label="Create Event" />
