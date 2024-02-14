@@ -1,4 +1,5 @@
 import EventCard from "@/components/shared/event-card";
+import { Button } from "@/components/ui/button";
 import { EventResult } from "@/lib/types/extended";
 import Link from "next/link";
 
@@ -20,9 +21,10 @@ export default async function Event() {
 	const events = await getEvents();
 
 	return (
-		<div className="padding-x">
-			<h1>Event</h1>
-			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 grid-flow-dense gap-5">
+		<div className="padding-x pt-5 pb-10 space-y-5">
+			<h1 className="text-3xl">Events</h1>
+
+			<div className="grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-3 xl:grid-cols-4 grid-flow-dense gap-5">
 				{events.map((event) => (
 					<Link href={`/event/${event.id}`} key={event.id}>
 						<EventCard key={event.id} {...event} />

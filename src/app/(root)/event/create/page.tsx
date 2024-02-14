@@ -11,7 +11,7 @@ const origin =
 		: process.env.PROD_DOMAIN;
 
 async function getEvents() {
-	const res = await fetch(`${origin}/api/events`, { method: "GET" });
+	const res = await fetch(`${origin}/api/events?take=5`, { method: "GET" });
 	const events = await res.json();
 
 	return events;

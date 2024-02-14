@@ -5,7 +5,7 @@ import { Button } from "../ui/button";
 
 const Hero = () => {
 	return (
-		<section className="flex flex-wrap md:flex-nowrap min-h-dvh py-20   items-center justify-center gap-y-10 md:justify-between padding-x  ">
+		<section className="flex flex-wrap md:flex-nowrap  py-20   items-center justify-center gap-y-10 md:justify-between padding-x  ">
 			<div className="flex flex-col justify-between gap-y-5  w-full  md:min-w-sm md:max-w-sm xl:max-w-lg">
 				<h1 className="text-3xl font-extrabold xl:text-5xl  ">
 					Host, Connect, Celebrate: Elevate Your Events with Our Platform

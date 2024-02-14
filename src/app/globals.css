@@ -78,6 +78,9 @@
 	body {
 		@apply bg-background text-foreground;
 	}
+	p.event-data {
+		@apply text-stone-600;
+	}
 }
 
 @layer components {
