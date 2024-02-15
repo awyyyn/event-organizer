@@ -1,8 +1,10 @@
 import EventCard from "@/components/shared/event-card";
+import EventCardSkeleton from "@/components/shared/event-card-skeleton";
 import { Button } from "@/components/ui/button";
 import { EventResult } from "@/lib/types/extended";
 import { Event as EventType } from "@prisma/client";
 import Image from "next/image";
+import Link from "next/link";
 import React, { Suspense } from "react";
 
 const origin =
@@ -25,7 +27,7 @@ export default async function Event({ params }: { params: { id: string } }) {
 	const date = startDate === endDate ? startDate : `${startDate} - ${endDate}`;
 
 	return (
-		<div className="padding-x space-y-5 mt-5">
+		<div className=" space-y-5 mt-5">
 			<h1 className="lg:text-5xl">{event.title}</h1>
 			<div className="flex flex-col lg:flex-row gap-5">
 				<div className="w-full shadow-md lg:w-7/12 relative h-[300px] lg:h-[500px]   ">
@@ -90,8 +92,7 @@ export default async function Event({ params }: { params: { id: string } }) {
 				</div>
 			</div>
 
-			<h3>Related Events</h3>
-			<Suspense fallback={<h1>Loading...</h1>}>
+			<Suspense fallback={<EventCardSkeleton />}>
 				<RelatedEvents eventId={event.id} categoryId={event.categoryId} />
 			</Suspense>
 		</div>
@@ -116,11 +117,20 @@ async function RelatedEvents({
 }) {
 	const relatedEvents = await getRelatedEvents(categoryId);
 	const events = relatedEvents.filter((e) => e.id !== eventId);
+
 	return (
-		<div className="grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-3 xl:grid-cols-4 grid-flow-dense gap-5">
-			{events.map((evnt) => (
-				<EventCard key={evnt.id} {...evnt} />
-			))}
-		</div>
+		events.length > 0 && (
+			<div>
+				<h3>Related Events</h3>
+				{events.map((evnt) => (
+					<Link
+						href={`/event/${evnt.id}`}
+						key={evnt.id}
+						className="grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-3 xl:grid-cols-4 grid-flow-dense gap-5">
+						<EventCard key={evnt.id} {...evnt} />
+					</Link>
+				))}
+			</div>
+		)
 	);
 }

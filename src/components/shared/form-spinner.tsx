@@ -3,7 +3,7 @@ import { Skeleton } from "../ui/skeleton";
 
 const FormSpinner = () => {
 	return (
-		<div className="lg:min-w-[20rem]">
+		<div className="lg:min-w-[20rema]   min-w-full shrink">
 			<div className="space-y-5">
 				<Skeleton className="h-10 w-2/3" />
 				{[1, 2, 3].map((item, index) => (

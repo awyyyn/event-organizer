@@ -5,7 +5,7 @@ export const nav_links = [
 	},
 	{
 		label: "Events",
-		path: "/event",
+		path: "/events",
 	},
 	{
 		label: "Create Event",

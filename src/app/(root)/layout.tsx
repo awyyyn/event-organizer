@@ -8,7 +8,7 @@ export default function layout({
 	return (
 		<div>
 			<Header />
-			<main className="screen">{children}</main>
+			<main className="padding-x pt-20">{children}</main>
 		</div>
 	);
 }
