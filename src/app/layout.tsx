@@ -6,6 +6,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { ourFileRouter } from "./api/uploadthing/core";
 import { extractRouterConfig } from "uploadthing/server";
 import { Toaster } from "@/components/ui/toaster";
+import States from "./context/state";
 
 const inter = Poppins({
 	subsets: ["devanagari", "latin", "latin-ext"],
@@ -38,7 +39,7 @@ export default function RootLayout({
 						routerConfig={extractRouterConfig(ourFileRouter)}
 					/>
 					<Toaster />
-					{children}
+					<States>{children}</States>
 				</body>
 			</html>
 		</ClerkProvider>
