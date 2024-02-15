@@ -1,9 +1,11 @@
-import EventCard from "@/components/shared/event-card";
-import { Button } from "@/components/ui/button";
+import Events from "@/components/shared/events";
 import { EventResult } from "@/lib/types/extended";
-import Link from "next/link";
+import React, { Suspense, lazy } from "react";
+import { getCategories } from "@/app/actions/category.actions";
+import { Category } from "@prisma/client";
+import { Skeleton } from "@/components/ui/skeleton";
 
-import React from "react";
+const CategoryFilter = lazy(() => import("./menu"));
 
 async function getEvents() {
 	const origin =
@@ -19,17 +21,19 @@ async function getEvents() {
 
 export default async function Event() {
 	const events = await getEvents();
+	const categories = await getCategories();
 
 	return (
 		<div className="padding-x pt-5 pb-10 space-y-5">
 			<h1 className="text-3xl">Events</h1>
-
+			<div className="flex gap-x-2 items-center ">
+				<h2 className="text-xl">Filter by category</h2>
+				<Suspense fallback={<Skeleton className="h-9 w-[200px]" />}>
+					<CategoryFilter categories={categories as Category[]} />
+				</Suspense>
+			</div>
 			<div className="grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-3 xl:grid-cols-4 grid-flow-dense gap-5">
-				{events.map((event) => (
-					<Link href={`/event/${event.id}`} key={event.id}>
-						<EventCard key={event.id} {...event} />
-					</Link>
-				))}
+				<Events events={events} />
 			</div>
 		</div>
 	);

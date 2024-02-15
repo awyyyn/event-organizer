@@ -298,7 +298,10 @@ export default function Form({
 					)}
 				</div>
 
-				<Button type="submit" className="w-full" disabled={isSubmitting}>
+				<Button
+					type="submit"
+					className="w-full flex items-center gap-x-2"
+					disabled={isSubmitting}>
 					{isSubmitting ? (
 						<>
 							<AiOutlineLoading className="animate-spin" />

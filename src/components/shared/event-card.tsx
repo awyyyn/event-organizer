@@ -11,8 +11,11 @@ export default function EventCard(event: EventResult) {
 			<div className="relative bottom-0 w-full min-h-[250px] md:min-h-[200px] ">
 				<Image
 					fill
+					placeholder="blur"
+					blurDataURL="/blurdata.png"
 					alt={event.title}
-					className="group-hover:scale-125 transition-all"
+					sizes="100vw"
+					className="group-hover:scale-125 transition-all object-cover"
 					src={event.imageUrl}
 				/>
 			</div>
