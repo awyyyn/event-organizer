@@ -7,12 +7,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 const CategoryFilter = lazy(() => import("./menu"));
 
-async function getEvents() {
-	const origin =
-		process.env.NODE_ENV === "development"
-			? process.env.DEV_DOMAIN
-			: process.env.PROD_DOMAIN;
+const origin =
+	process.env.NODE_ENV === "development"
+		? process.env.DEV_DOMAIN
+		: process.env.PROD_DOMAIN;
 
+async function getEvents() {
 	const res = await fetch(`${origin}/api/events?take=5`, { method: "GET" });
 	const events: EventResult[] = await res.json();
 
@@ -24,7 +24,7 @@ export default async function Event() {
 	const categories = await getCategories();
 
 	return (
-		<div className="padding-x pt-5 pb-10 space-y-5">
+		<div className=" pt-5 pb-10 space-y-5">
 			<h1 className="text-3xl">Events</h1>
 			<div className="flex gap-x-2 items-center ">
 				<h2 className="text-xl">Filter by category</h2>

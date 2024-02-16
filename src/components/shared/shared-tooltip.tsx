@@ -30,9 +30,7 @@ export default function SharedTooltip({
 	return (
 		<TooltipProvider>
 			<Tooltip delayDuration={delay}>
-				<TooltipTrigger {...props?.trigger}>
-					{children}
-				</TooltipTrigger>
+				<TooltipTrigger {...props?.trigger}>{children}</TooltipTrigger>
 				<TooltipContent {...props?.content}>
 					<p>{tooltip}</p>
 				</TooltipContent>
