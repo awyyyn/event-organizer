@@ -9,7 +9,7 @@ export const createEvent = async (
 ) => {
 	const user = await currentUser();
 	const userId = user?.publicMetadata?.userId as string;
-	console.log(values.categoryId, "sd");
+
 	try {
 		const event = await prisma.event.create({
 			data: {
@@ -40,5 +40,25 @@ export const createEvent = async (
 	} catch (error) {
 		console.log(error);
 		// throw new Error("Something went wrong!");
+	}
+};
+
+export const getEventsByUser = async () => {
+	const user = await currentUser();
+	const userId = user?.publicMetadata?.userId as string;
+	try {
+		const myEvents = await prisma.event.findMany({
+			where: {
+				eventById: userId,
+			},
+			include: {
+				eventBy: true,
+				category: true,
+			},
+		});
+
+		return myEvents;
+	} catch (error) {
+		console.log(error);
 	}
 };
