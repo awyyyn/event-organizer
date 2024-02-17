@@ -60,6 +60,7 @@ export async function POST(req: Request) {
 		case "session.created": {
 			const { public_metadata } = event.data as UserJSON;
 			const id = public_metadata.userId as string;
+			console.log("USER CREATEE USER JSON >>>", id);
 			cookies().set("userId", id);
 		}
 		case "session.ended": {
