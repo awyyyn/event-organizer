@@ -1,6 +1,6 @@
-import { headers } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { NextResponse } from "next/server";
-import { WebhookEvent } from "@clerk/nextjs/server";
+import { UserJSON, UserWebhookEvent, WebhookEvent } from "@clerk/nextjs/server";
 import { Webhook } from "svix";
 // import { User } from "@prisma/client";
 import { createUser, deleteUser, updateUser } from "@/app/actions/user.actions";
@@ -47,57 +47,65 @@ export async function POST(req: Request) {
 		);
 	}
 
-	// Get the ID and type
-	const { id } = event.data;
-	const eventType = event.type;
-
-	console.log(`Webhook with and ID of ${id} and type of ${eventType}`);
-	console.log("Webhook body:", body);
-	// return NextResponse.json({ message: "Webhook received" }, { status: 200 });
-
-	if (event.type === "user.created") {
-		const data = event.data;
-
-		const user = {
-			email: data.email_addresses[0].email_address,
-			firstname: data.first_name,
-			lastname: data.last_name,
-			photo: data.image_url,
-			username: data.username!,
-		};
-
-		const newUser = await createUser(user);
-		if (newUser?.id as string) {
-			await clerkClient.users.updateUserMetadata(data.id, {
-				publicMetadata: { userId: newUser?.id },
-			});
+	switch (event.type) {
+		case "user.updated": {
+			await userUpdates({ ...event.data });
 		}
-		console.log(newUser);
-		return NextResponse.json(newUser, { status: 201, statusText: "OK" });
+		case "user.created": {
+			await userCreated({ ...event.data });
+		}
+		case "user.deleted": {
+			await userDeleted(event.data.id!);
+		}
+		case "session.created": {
+			const { public_metadata } = event.data as UserJSON;
+			const id = public_metadata.userId as string;
+			cookies().set("userId", id);
+		}
+		case "session.ended": {
+			cookies().delete("userId");
+		}
+		default:
+			return NextResponse.json("Error Occured", {
+				status: 400,
+				statusText: "ERR",
+			});
 	}
+}
 
-	if (event.type === "user.deleted") {
-		await deleteUser(event.data.id as string);
-		return NextResponse.json("User Deleted", { status: 200, statusText: "OK" });
-	}
+async function userUpdates(data: UserJSON) {
+	await updateUser(data.public_metadata.userId as string, {
+		email: data.email_addresses[0].email_address,
+		firstname: data.first_name,
+		lastname: data.last_name,
+		username: data.username!,
+		photo: data.image_url,
+	});
+}
 
-	if (event.type === "user.updated") {
-		const {
-			email_addresses,
-			first_name,
-			last_name,
-			image_url,
-			username,
-			public_metadata,
-		} = event.data;
+async function userCreated(data: UserJSON) {
+	const user = {
+		email: data.email_addresses[0].email_address,
+		firstname: data.first_name,
+		lastname: data.last_name,
+		photo: data.image_url,
+		username: data.username!,
+	};
 
-		await updateUser(public_metadata.userId as string, {
-			email: email_addresses[0].email_address,
-			firstname: first_name,
-			lastname: last_name,
-			username: username!,
-			photo: image_url,
+	const newUser = await createUser(user);
+
+	if (newUser?.id as string) {
+		await clerkClient.users.updateUserMetadata(data.id, {
+			publicMetadata: { userId: newUser?.id },
 		});
 	}
-	return NextResponse.json("Error Occured", { status: 400, statusText: "ERR" });
+	/* set a cookie */
+	cookies().set("userId", newUser?.id as string);
+	return NextResponse.json(newUser, { status: 201, statusText: "OK" });
+}
+
+async function userDeleted(id: string) {
+	cookies().delete("userId");
+	await deleteUser(id);
+	return NextResponse.json("User Deleted", { status: 200, statusText: "OK" });
 }
