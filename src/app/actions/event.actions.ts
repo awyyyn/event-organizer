@@ -63,3 +63,38 @@ export async function getEventData(id: string) {
 
 	return event;
 }
+
+export const updateEvent = async (
+	values: Omit<Event, "createdAt" | "updatedAt">
+) => {
+	const updateEvent = await prisma.event.update({
+		data: {
+			endDate: values.endDate,
+			endTime: values.endTime,
+			imageUrl: values.imageUrl,
+			price: values.price,
+			startDate: values.startDate,
+			startTime: values.startTime,
+			title: values.title,
+			url: values.url,
+			location: values.location,
+			description: values.description,
+			isFree: values.isFree,
+			category: {
+				connect: {
+					id: values.categoryId,
+				},
+			},
+		},
+		where: {
+			id: values.id,
+			eventById: values.eventById,
+		},
+	});
+
+	if (updateEvent === null) {
+		throw new Error("Invalid Action");
+	}
+
+	return updateEvent;
+};

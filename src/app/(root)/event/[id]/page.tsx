@@ -3,6 +3,7 @@ import EventCardSkeleton from "@/components/shared/event-card-skeleton";
 import { Button } from "@/components/ui/button";
 import { EventResult } from "@/lib/types/extended";
 import { Event as EventType } from "@prisma/client";
+import { unstable_noStore } from "next/cache";
 import Image from "next/image";
 import Link from "next/link";
 import React, { Suspense } from "react";
@@ -21,6 +22,7 @@ async function getEvent(eventId: string) {
 }
 
 export default async function Event({ params }: { params: { id: string } }) {
+	unstable_noStore();
 	const event = await getEvent(params.id);
 	const startDate = new Date(event.startDate).toDateString();
 	const endDate = new Date(event.endDate).toDateString();

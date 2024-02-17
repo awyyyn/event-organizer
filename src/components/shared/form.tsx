@@ -5,7 +5,6 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useFormik } from "formik";
 import { boolean, date, number, object, string } from "yup";
-
 import React from "react";
 import DatePicker from "@/components/shared/date-picker";
 import { Switch } from "@/components/ui/switch";
@@ -16,7 +15,7 @@ import { SelectTime } from "./select-time";
 import { useToast } from "@/components/ui/use-toast";
 import { AiOutlineLoading } from "react-icons/ai";
 import { useRouter } from "next/navigation";
-import { createEvent } from "@/app/actions/event.actions";
+import { createEvent, updateEvent } from "@/app/actions/event.actions";
 import { EventResult } from "@/lib/types/extended";
 
 const validateSchema = object().shape({
@@ -42,17 +41,9 @@ interface FormProps {
 	editEvent?: boolean;
 	label: string;
 	data?: Partial<EventResult>;
-	action?: (
-		values: Partial<Omit<Event, "createdAt" | "updatedAt" | "eventById">>
-	) => Promise<Event>;
 }
 
-export default function Form({
-	editEvent = false,
-	data,
-	action,
-	label,
-}: FormProps) {
+export default function Form({ editEvent = false, data, label }: FormProps) {
 	const router = useRouter();
 	let initialValues;
 	const { toast } = useToast();
@@ -71,6 +62,8 @@ export default function Form({
 			imageUrl: data.imageUrl,
 			startDate: new Date(data.startDate as Date),
 			endDate: new Date(data.endDate as Date),
+			id: data.id,
+			eventById: data.eventById,
 		};
 	} else {
 		initialValues = {
@@ -106,6 +99,28 @@ export default function Form({
 			let event;
 
 			if (editEvent) {
+				const categoryID =
+					values.category?.toLowerCase() ===
+					initialValues.category?.toLowerCase()
+						? data?.categoryId
+						: values.category;
+
+				event = await updateEvent({
+					id: values.id!,
+					eventById: values.eventById!,
+					categoryId: categoryID!,
+					description: values?.description!,
+					endDate: values.endDate ? values.endDate : new Date(),
+					endTime: values.endTime!,
+					imageUrl: values.imageUrl!,
+					isFree: values.isFree as boolean,
+					location: values.location!,
+					price: Number(values.price),
+					startDate: values.startDate as Date,
+					startTime: values.startTime!,
+					title: values.title!,
+					url: values.url!,
+				});
 			} else {
 				event = await createEvent({
 					categoryId: values.category!,
@@ -128,7 +143,9 @@ export default function Form({
 				toast({
 					variant: "default",
 					className: "bg-green-600 z-5  text-white",
-					description: "Event successfully created!",
+					description: `Event successfully ${
+						editEvent ? "updated" : "created"
+					}!`,
 				});
 			} else {
 				toast({
@@ -311,10 +328,10 @@ export default function Form({
 					{isSubmitting ? (
 						<>
 							<AiOutlineLoading className="animate-spin" />
-							Creating your event...
+							{editEvent ? "Updating" : "Creating"} your event...
 						</>
 					) : (
-						"Create Event"
+						<span>{editEvent ? "Updating" : "Creating"} Event</span>
 					)}
 				</Button>
 			</div>
