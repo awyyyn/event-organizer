@@ -17,6 +17,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { AiOutlineLoading } from "react-icons/ai";
 import { useRouter } from "next/navigation";
 import { createEvent } from "@/app/actions/event.actions";
+import { EventResult } from "@/lib/types/extended";
 
 const validateSchema = object().shape({
 	title: string().required("Title is required"),
@@ -40,7 +41,7 @@ const validateSchema = object().shape({
 interface FormProps {
 	editEvent?: boolean;
 	label: string;
-	data?: Partial<Omit<Event, "createdAt" | "updatedAt" | "eventById">>;
+	data?: Partial<EventResult>;
 	action?: (
 		values: Partial<Omit<Event, "createdAt" | "updatedAt" | "eventById">>
 	) => Promise<Event>;
@@ -59,7 +60,7 @@ export default function Form({
 	if (editEvent && data) {
 		initialValues = {
 			description: data.description,
-			category: data.categoryId,
+			category: data?.category?.name,
 			title: data.title,
 			isFree: data.isFree,
 			location: data.location,
@@ -68,8 +69,8 @@ export default function Form({
 			url: data.url,
 			price: data.price,
 			imageUrl: data.imageUrl,
-			startDate: data.startDate,
-			endDate: data.endDate,
+			startDate: new Date(data.startDate as Date),
+			endDate: new Date(data.endDate as Date),
 		};
 	} else {
 		initialValues = {
@@ -144,10 +145,11 @@ export default function Form({
 	return (
 		<form onSubmit={handleSubmit}>
 			<h1 className="text-xl lg:text-4xl font-bold">{label}</h1>
-			<div className="w-full space-y-5 pt-3">
+			<div className="w-full space-y-5 pt-3 px-0.5">
 				<div className="space-y-2">
 					<Label>Category</Label>
 					<ComboBox
+						defaultValue={values.category}
 						setFieldValue={(value) => setFieldValue("category", value)}
 						handleBlur={() => handleBlur("category")}
 					/>
@@ -256,7 +258,11 @@ export default function Form({
 					<Label className="block" htmlFor="date">
 						Date
 					</Label>
-					<DatePicker handleChange={setFieldValue} />
+					<DatePicker
+						defaultValueTo={values.endDate}
+						defaultValueFrom={values.startDate}
+						handleChange={setFieldValue}
+					/>
 					{submitCount > 0 && errors.startDate && (
 						<span className="error-message"> {errors.startDate as any} </span>
 					)}

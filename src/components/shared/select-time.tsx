@@ -15,16 +15,18 @@ interface SelectTimeProps {
 	handleBlur: () => void;
 	handleChange: (value: string) => void;
 	label?: "start" | "end";
+	defaultValue?: string;
 }
 
 export function SelectTime({
 	handleBlur,
 	handleChange,
 	label = "start",
+	defaultValue,
 }: SelectTimeProps) {
 	const [time, setTime] = React.useState({
-		time: label === "start" ? "08:00" : "05:00",
-		amORpm: label === "start" ? "am" : "pm",
+		time: defaultValue?.split(" ")[0] ?? label === "start" ? "08:00" : "05:00",
+		amORpm: defaultValue?.split(" ")[1] ?? label === "start" ? "am" : "pm",
 	});
 
 	React.useEffect(() => {

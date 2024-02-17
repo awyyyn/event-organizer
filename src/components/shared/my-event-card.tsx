@@ -6,6 +6,7 @@ import { Button } from "../ui/button";
 import SharedTooltip from "./shared-tooltip";
 import { RiEditBoxFill } from "react-icons/ri";
 import { MdDelete } from "react-icons/md";
+import Link from "next/link";
 
 const tooltipProps = {
 	trigger: {
@@ -34,13 +35,15 @@ export default function MyEventCard(event: EventResult) {
 			<div className="rounded-b-sm   p-2   w-full  items-center  ">
 				<div className="flex justify-between items-center flex-wrap gap-2">
 					<div className="space-x-1">
-						<Badge className=" ">{event.isFree ? "Free" : "Premium"}</Badge>
-						<Badge className=" ">$ {event.price}.00</Badge>
+						<Badge className=" ">{event.isFree ? "Free" : "Premium"} </Badge>
+						<Badge className=" ">$ {event.price} </Badge>
 					</div>
 					<div className=" space-x-1   ">
-						<SharedTooltip tooltip="Edit" props={tooltipProps}>
-							<RiEditBoxFill color="#03ad1d" />
-						</SharedTooltip>
+						<Link href={`/event/edit/${event.id}`}>
+							<SharedTooltip tooltip="Edit" props={tooltipProps}>
+								<RiEditBoxFill color="#03ad1d" />
+							</SharedTooltip>
+						</Link>
 						<SharedTooltip tooltip="Delete" props={tooltipProps}>
 							<MdDelete color="#f00" />
 						</SharedTooltip>

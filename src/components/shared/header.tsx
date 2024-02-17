@@ -58,7 +58,7 @@ const Nav = ({ className }: { className?: string }) => {
 const Header = () => {
 	return (
 		<header>
-			<div className="flex padding-x py-5 items-center justify-between shadow-md fixed top-0 w-screen z-20 bg-white">
+			<div className="flex padding-x py-5 items-center justify-between shadow-md fixed top-0 w-screen z-[100] bg-white">
 				<div className="flex items-center gap-x-4">
 					<div className="md:hidden">
 						<NavSheet />

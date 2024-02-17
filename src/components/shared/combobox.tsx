@@ -25,12 +25,17 @@ import { IoReload } from "react-icons/io5";
 interface ComboBoxProps {
 	handleBlur: () => void;
 	setFieldValue: (id: string) => void;
+	defaultValue?: string;
 }
 
-export function ComboBox({ handleBlur, setFieldValue }: ComboBoxProps) {
+export function ComboBox({
+	handleBlur,
+	setFieldValue,
+	defaultValue,
+}: ComboBoxProps) {
 	const [open, setOpen] = React.useState(false);
 	const [isLoading, setIsLoading] = React.useState(false);
-	const [value, setValue] = React.useState("");
+	const [value, setValue] = React.useState(defaultValue ?? "");
 	const [categories, setCategories] = React.useState<Category[]>();
 
 	React.useEffect(() => {
@@ -59,12 +64,13 @@ export function ComboBox({ handleBlur, setFieldValue }: ComboBoxProps) {
 	};
 
 	return (
-		<div className="w-full flex  gap-x-2">
+		<div className="w-full flex  z-[101] gap-x-2">
 			<Popover open={open} onOpenChange={setOpen}>
 				<PopoverTrigger asChild className="w-full">
 					<Button
 						onClick={handleBlur}
 						variant="outline"
+						type="button"
 						role="combobox"
 						aria-expanded={open}
 						className=" w-full justify-between ">

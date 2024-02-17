@@ -15,12 +15,18 @@ import { DateRange } from "react-day-picker";
 
 interface DatePickerProps {
 	handleChange: any;
+	defaultValueFrom?: Date;
+	defaultValueTo?: Date;
 }
 
-function DatePicker({ handleChange }: DatePickerProps) {
+function DatePicker({
+	handleChange,
+	defaultValueFrom,
+	defaultValueTo,
+}: DatePickerProps) {
 	const [date, setDate] = React.useState<DateRange | undefined>({
-		from: /* new Date() */ undefined,
-		to: /* new Date() */ undefined,
+		from: defaultValueFrom ?? undefined,
+		to: defaultValueTo ?? undefined,
 	});
 
 	useEffect(() => {
