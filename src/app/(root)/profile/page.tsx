@@ -3,17 +3,10 @@ import React, { Suspense } from "react";
 import EventCardSkeleton from "@/components/shared/event-card-skeleton";
 import Link from "next/link";
 import { getOrdersByUserId } from "@/app/actions/orders.actions";
-import { currentUser } from "@clerk/nextjs";
 import { getEventsByUser } from "@/app/actions/event.actions";
 import MyEventCard from "@/components/shared/my-event-card";
 
-const origin =
-	process.env.NODE_ENV === "development"
-		? process.env.DEV_DOMAIN
-		: process.env.PROD_DOMAIN;
-
-export default async function Profile() {
-	const user = await currentUser();
+export default async function Page() {
 	const tickets = await getOrdersByUserId();
 
 	return (
