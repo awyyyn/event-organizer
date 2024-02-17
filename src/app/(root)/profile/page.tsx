@@ -37,7 +37,7 @@ export default async function Page() {
 	);
 }
 
-export async function EventOrganized() {
+async function EventOrganized() {
 	const myEvents = await getEventsByUser();
 
 	return (
