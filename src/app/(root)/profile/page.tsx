@@ -3,8 +3,8 @@ import React, { Suspense } from "react";
 import EventCardSkeleton from "@/components/shared/event-card-skeleton";
 import Link from "next/link";
 import { getOrdersByUserId } from "@/app/actions/orders.actions";
-import { getEventsByUser } from "@/app/actions/event.actions";
 import MyEventCard from "@/components/shared/my-event-card";
+import { getMyEvents } from "@/app/actions/user.actions";
 
 export default async function Page() {
 	const tickets = await getOrdersByUserId();
@@ -38,7 +38,7 @@ export default async function Page() {
 }
 
 async function EventOrganized() {
-	const myEvents = await getEventsByUser();
+	const myEvents = await getMyEvents();
 
 	return (
 		<div className="grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-3 xl:grid-cols-4 grid-flow-dense gap-5">
