@@ -43,22 +43,23 @@ export const createEvent = async (
 	}
 };
 
-export const getEventsByUser = async () => {
+export async function getEventData(id: string) {
 	const user = await currentUser();
-	const userId = user?.publicMetadata?.userId as string;
-	try {
-		const myEvents = await prisma.event.findMany({
-			where: {
-				eventById: userId,
-			},
-			include: {
-				eventBy: true,
-				category: true,
-			},
-		});
+	const userId = user?.publicMetadata.userId as string;
+	const event = await prisma.event.findFirst({
+		where: {
+			id,
+			eventById: userId,
+		},
+		include: {
+			category: true,
+			eventBy: true,
+		},
+	});
 
-		return myEvents;
-	} catch (error) {
-		console.log(error);
+	if (event === null) {
+		throw new Error("Invalid Action");
 	}
-};
+
+	return event;
+}

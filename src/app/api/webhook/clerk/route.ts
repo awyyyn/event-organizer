@@ -57,15 +57,6 @@ export async function POST(req: Request) {
 		case "user.deleted": {
 			await userDeleted(event.data.id!);
 		}
-		case "session.created": {
-			const { public_metadata } = event.data as UserJSON;
-			const id = public_metadata.userId as string;
-			console.log("USER CREATEE USER JSON >>>", id);
-			cookies().set("userId", id);
-		}
-		case "session.ended": {
-			cookies().delete("userId");
-		}
 		default:
 			return NextResponse.json("Error Occured", {
 				status: 400,

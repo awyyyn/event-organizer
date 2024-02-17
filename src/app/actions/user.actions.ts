@@ -1,7 +1,8 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { auth } from "@clerk/nextjs";
+import { EventResult } from "@/lib/types/extended";
+import { auth, currentUser } from "@clerk/nextjs";
 import type { User } from "@prisma/client";
 
 export async function createUser(
@@ -68,8 +69,19 @@ export async function updateUser(
 	}
 }
 
-export async function getAuth() {
-	const { userId } = auth();
+export async function getMyEvents() {
+	const user = await currentUser();
+	const userId = user?.publicMetadata.userId as string;
 
-	return userId;
+	const result = await prisma.user.findUnique({
+		include: {
+			events: true,
+		},
+		where: {
+			id: userId,
+		},
+	});
+
+	const events = result?.events as EventResult[];
+	return events;
 }
