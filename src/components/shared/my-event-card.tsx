@@ -5,14 +5,10 @@ import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import SharedTooltip from "./shared-tooltip";
 import { RiEditBoxFill } from "react-icons/ri";
-import { MdDelete } from "react-icons/md";
 import Link from "next/link";
-
-const tooltipProps = {
-	trigger: {
-		className: "rounded-sm px-3 py-1  transition-all hover:bg-black/10 ",
-	},
-};
+import DeleteDialog from "./dialog";
+import { deleteEventByUser } from "@/app/actions/event.actions";
+import { redirect } from "next/navigation";
 
 export default function MyEventCard(event: EventResult) {
 	const startDate = new Date(event.startDate).toDateString();
@@ -38,15 +34,13 @@ export default function MyEventCard(event: EventResult) {
 						<Badge className=" ">{event.isFree ? "Free" : "Premium"} </Badge>
 						<Badge className=" ">$ {event.price} </Badge>
 					</div>
-					<div className=" space-x-1   ">
-						<Link href={`/event/edit/${event.id}`}>
-							<SharedTooltip tooltip="Edit" props={tooltipProps}>
-								<RiEditBoxFill color="#03ad1d" />
-							</SharedTooltip>
+					<div className=" space-x-1 flex gap-2  ">
+						<Link
+							href={`/event/edit/${event.id}`}
+							className="rounded-sm px-3 py-1  transition-all hover:bg-black/10">
+							<RiEditBoxFill color="#03ad1d" />
 						</Link>
-						<SharedTooltip tooltip="Delete" props={tooltipProps}>
-							<MdDelete color="#f00" />
-						</SharedTooltip>
+						<DeleteDialog id={event.id} />
 					</div>
 				</div>
 				<h1 className=" text-2xl font-bold">{event.title}</h1>

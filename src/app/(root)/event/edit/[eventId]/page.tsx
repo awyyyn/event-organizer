@@ -1,6 +1,7 @@
 import { getEventData } from "@/app/actions/event.actions";
 import FormSpinner from "@/components/shared/form-spinner";
 import { unstable_noStore } from "next/cache";
+import { redirect } from "next/navigation";
 import React, { Suspense, lazy } from "react";
 const Form = lazy(() => import("@/components/shared/form"));
 
@@ -12,6 +13,10 @@ export default async function EditModal({
 	unstable_noStore();
 	const { eventId } = params;
 	const event = await getEventData(eventId);
+
+	if (event === null) {
+		redirect("/events");
+	}
 
 	return (
 		<div>

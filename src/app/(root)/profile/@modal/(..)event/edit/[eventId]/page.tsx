@@ -3,6 +3,7 @@ import { CloseButton } from "./close";
 import FormSpinner from "@/components/shared/form-spinner";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { getEventData } from "@/app/actions/event.actions";
+import { redirect } from "next/navigation";
 const Form = lazy(() => import("@/components/shared/form"));
 
 export default async function Page({
@@ -12,6 +13,10 @@ export default async function Page({
 }) {
 	const { eventId } = params;
 	const event = await getEventData(eventId);
+
+	if (event === null) {
+		redirect("/events");
+	}
 
 	return (
 		<div className="h-screen w-screen grid place-content-center absolute top-0 left-0 z-20 backdrop-blur-md">

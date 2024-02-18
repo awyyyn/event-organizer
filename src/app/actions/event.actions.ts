@@ -3,6 +3,7 @@
 import prisma from "@/lib/prisma";
 import { currentUser } from "@clerk/nextjs";
 import { Event } from "@prisma/client";
+import { revalidatePath } from "next/cache";
 
 export const createEvent = async (
 	values: Omit<Event, "createdAt" | "updatedAt" | "eventById" | "id">
@@ -58,7 +59,7 @@ export async function getEventData(id: string) {
 	});
 
 	if (event === null) {
-		throw new Error("Invalid Action");
+		return null;
 	}
 
 	return event;
@@ -93,8 +94,26 @@ export const updateEvent = async (
 	});
 
 	if (updateEvent === null) {
-		throw new Error("Invalid Action");
+		throw new Error("Error 500");
 	}
-
+	revalidatePath("/profile");
 	return updateEvent;
+};
+
+export const deleteEventByUser = async (eventId: string) => {
+	const user = await currentUser();
+	const userId = user?.publicMetadata.userId as string;
+
+	const event = await prisma.event.delete({
+		where: {
+			id: eventId,
+			eventById: userId,
+		},
+	});
+
+	if (event === null) {
+		return false;
+	}
+	revalidatePath("/profile");
+	return true;
 };

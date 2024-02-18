@@ -16,7 +16,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { AiOutlineLoading } from "react-icons/ai";
 import { useRouter } from "next/navigation";
 import { createEvent, updateEvent } from "@/app/actions/event.actions";
-import { EventResult } from "@/lib/types/extended";
+import { EventResult, InitialValues } from "@/lib/types/extended";
 
 const validateSchema = object().shape({
 	title: string().required("Title is required"),
@@ -45,21 +45,21 @@ interface FormProps {
 
 export default function Form({ editEvent = false, data, label }: FormProps) {
 	const router = useRouter();
-	let initialValues;
+	let initialValues: InitialValues;
 	const { toast } = useToast();
 
 	if (editEvent && data) {
 		initialValues = {
-			description: data.description,
-			category: data?.category?.name,
-			title: data.title,
-			isFree: data.isFree,
-			location: data.location,
-			startTime: data.startTime,
-			endTime: data.endTime,
-			url: data.url,
-			price: data.price,
-			imageUrl: data.imageUrl,
+			description: data.description!,
+			category: data?.category?.name!,
+			title: data.title!,
+			isFree: data.isFree!,
+			location: data.location!,
+			startTime: data.startTime!,
+			endTime: data.endTime!,
+			url: data.url!,
+			price: data.price!,
+			imageUrl: data.imageUrl!,
 			startDate: new Date(data.startDate as Date),
 			endDate: new Date(data.endDate as Date),
 			id: data.id,
@@ -73,7 +73,7 @@ export default function Form({ editEvent = false, data, label }: FormProps) {
 			isFree: false,
 			location: "",
 			url: "",
-			price: "",
+			price: 0,
 			imageUrl: "",
 			startDate: new Date(),
 			endDate: new Date(),
