@@ -91,13 +91,10 @@ async function userCreated(data: UserJSON) {
 			publicMetadata: { userId: newUser?.id },
 		});
 	}
-	/* set a cookie */
-	cookies().set("userId", newUser?.id as string);
 	return NextResponse.json(newUser, { status: 201, statusText: "OK" });
 }
 
 async function userDeleted(id: string) {
-	cookies().delete("userId");
 	await deleteUser(id);
 	return NextResponse.json("User Deleted", { status: 200, statusText: "OK" });
 }
