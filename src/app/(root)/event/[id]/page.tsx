@@ -1,5 +1,7 @@
+import { checkout } from "@/app/actions/checkout.actions";
 import EventCard from "@/components/shared/event-card";
 import EventCardSkeleton from "@/components/shared/event-card-skeleton";
+import Quantity from "@/components/shared/quantity";
 import { Button } from "@/components/ui/button";
 import { EventResult } from "@/lib/types/extended";
 import { Event as EventType } from "@prisma/client";
@@ -89,8 +91,13 @@ export default async function Event({ params }: { params: { id: string } }) {
 							{event.description ? event.description : "none"}
 						</p>
 					</div>
-
-					<Button>Buy ticket</Button>
+					<form className="space-y-3" action={checkout}>
+						<input type="hidden" value={event.id} name="eventId" />
+						<input type="hidden" value={event.price as number} name="price" />
+						<input type="hidden" value={event.title} name="event" />
+						<Quantity />
+						<Button type="submit">Buy Ticket</Button>
+					</form>
 				</div>
 			</div>
 

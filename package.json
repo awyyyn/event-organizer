@@ -41,6 +41,7 @@
 		"react-dom": "^18",
 		"react-icons": "^5.0.1",
 		"sharp": "^0.33.2",
+		"stripe": "^14.17.0",
 		"svix": "^1.17.0",
 		"tailwind-merge": "^2.2.1",
 		"tailwindcss-animate": "^1.0.7",
